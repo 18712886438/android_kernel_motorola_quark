@@ -12,6 +12,8 @@ ifeq ($(KERNEL_BUILD),1)
 	MODNAME := wlan
 	WLAN_ROOT := drivers/staging/qcacld-2.0
 	WLAN_OPEN_SOURCE := 1
+	CONFIG_QCA_WIFI_2_0 := 1
+	CONFIG_QCA_WIFI_ISOC := 0
 endif
 
 ifeq ($(KERNEL_BUILD), 0)
@@ -36,14 +38,14 @@ ifeq ($(KERNEL_BUILD), 0)
 	#Flag to enable Fast Transition (11r) feature
 	CONFIG_QCOM_VOWIFI_11R := y
 
-        ifneq ($(CONFIG_QCA_CLD_WLAN),)
-                ifeq ($(CONFIG_CNSS),y)
-        #Flag to enable Protected Managment Frames (11w) feature
-                CONFIG_WLAN_FEATURE_11W := y
-        #Flag to enable LTE CoEx feature
-                CONFIG_QCOM_LTE_COEX := y
-                endif
-        endif
+	ifneq ($(CONFIG_QCA_CLD_WLAN),)
+		ifeq ($(CONFIG_CNSS),y)
+			#Flag to enable Protected Managment Frames (11w) feature
+			CONFIG_WLAN_FEATURE_11W := y
+			#Flag to enable LTE CoEx feature
+			CONFIG_QCOM_LTE_COEX := y
+		endif
+	endif
 
 	#Flag to enable new Linux Regulatory implementation
 	CONFIG_ENABLE_LINUX_REG := y
@@ -52,8 +54,8 @@ endif
 
 # To enable ESE upload, dependent config
 # CONFIG_QCOM_ESE must be enabled.
-CONFIG_QCOM_ESE := n
-CONFIG_QCOM_ESE_UPLOAD := n
+CONFIG_QCOM_ESE := y
+CONFIG_QCOM_ESE_UPLOAD := y
 
 # Feature flags which are not (currently) configurable via Kconfig
 
@@ -900,6 +902,7 @@ CDEFINES :=	-DANI_LITTLE_BYTE_ENDIAN \
 		-DQCA_SUPPORT_TX_THROTTLE_LL \
 		-DWMI_INTERFACE_EVENT_LOGGING\
 		-DATH_SUPPORT_WAPI\
+		-DHTC_CRP_DEBUG
 
 ifeq ($(CONFIG_ARCH_MSM), y)
 CDEFINES += -DMSM_PLATFORM
@@ -1077,6 +1080,9 @@ endif
 ifeq ($(CONFIG_HIF_PCI), 1)
 CDEFINES += -DHIF_PCI
 endif
+
+#Enable FW logs through ini
+CDEFINES += -DCONFIG_FW_LOGS_BASED_ON_INI
 
 #Enable pci read/write config functions
 ifeq ($(CONFIG_ATH_PCI), 1)
