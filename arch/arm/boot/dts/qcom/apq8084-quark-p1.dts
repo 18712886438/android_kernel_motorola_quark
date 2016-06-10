@@ -1,0 +1,190 @@
+/* Copyright (c) 2014 Motorola Mobility LLC
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+
+#include "apq8084.dtsi"
+#include "apq8084-quark.dtsi"
+
+/ {
+	qcom,msm-id = <178 0x42 0x8100>,
+		  <178 0x44 0x8100>; /* MAXX */
+
+	/delete-node/ cycapsense_prog;
+};
+
+&i2c_12 {
+	stm401@39 {
+		stm401_fw_version = "_p1";
+	};
+};
+
+&max17050 {
+	interrupt-parent = <&spmi_bus>;
+	interrupts = <0x0 0xa1 0x0>;    /* PMA8084 MPP 2 */
+	gpios = <&pma8084_mpps 2 0x11>;  /* GPIOF_DIR_IN|GPIOF_EXPORT */
+};
+
+&soc {
+	factory_support {
+		gpios = <&pma8084_gpios 17 0x0>, /* GPIOF_OUT_INIT_LOW */
+			<&pma8084_mpps 7 0x1>, /* GPIOF_IN */
+			<&pma8084_mpps 6 0x1>; /* GPIOF_IN */
+	};
+};
+
+&i2c_0 {
+	mmi_wls_chrg@6c {
+		gpios = <&pma8084_gpios 1 0x1>, /* GPIOF_IN */
+			<&pma8084_mpps 4 0x2>, /* GPIOF_OUT_INIT_HIGH */
+			<&msmgpio 66 0x0>; /* GPIOF_OUT_INIT_LOW */
+	};
+};
+
+&smb1357_otg_vreg {
+	qcom,max-batt-curr-ma = <2300>;
+};
+
+&pma8084_gpios {
+	gpio@d000 { /* GPIO 17 */
+		qcom,mode = <1>;		/* Digital output */
+		qcom,output-type = <0>;		/* CMOS logic */
+		qcom,invert = <0>;		/* Output low initially */
+		qcom,vin-sel = <2>;		/* VIN 2 */
+		qcom,src-sel = <0>;		/* GPIO */
+		qcom,out-strength = <2>;	/* Medium */
+		qcom,master-en = <1>;		/* Enable GPIO */
+	};
+};
+
+&pma8084_mpps {
+	mpp@a300 { /* MPP 4 */
+		/* Wireless Charge Complete N */
+		qcom,mode = <1>;		/* Digital output */
+		qcom,output-type = <1>;		/* Open Drain NMOS logic */
+		qcom,vin-sel = <2>;		/* VIN 2 */
+		qcom,src-sel = <0>;		/* Constant */
+		qcom,out-strength = <1>;	/* Low */
+		qcom,master-en = <1>;		/* Enable GPIO */
+	};
+	mpp@a600 { /* MPP 7 */
+		qcom,mode = <0>;          /* QPNP_PIN_MODE_DIG_IN */
+		qcom,pull = <1>;	/* No pull */
+		qcom,vin-sel = <2>;
+		qcom,master-en = <1>;
+	};
+};
+
+&usb3 {
+	interrupt-map = <0x0 0 &intc 0 133 0>;
+	interrupt-names = "hs_phy_irq";
+};
+
+&pma8084_vadc {
+	chan@73 {
+		label = "apq_therm";
+		reg = <0x73>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <0>;
+	};
+	chan@77 {
+		label = "quiet_therm";
+		reg = <0x77>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <0>;
+	};
+	chan@74 {
+		label = "chg_therm";
+		reg = <0x74>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <0>;
+	};
+	chan@78 {
+		label = "wchg_therm";
+		reg = <0x78>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <0>;
+	};
+};
+
+&pma8084_adc_tm {
+	chan@73 {
+		label = "apq_therm";
+		reg = <0x73>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <3>;
+		qcom,btm-channel-number = <0x68>;
+		qcom,thermal-node;
+	};
+	chan@77 {
+		label = "quiet_therm";
+		reg = <0x77>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <3>;
+		qcom,btm-channel-number = <0x70>;
+		qcom,thermal-node;
+	};
+	chan@74{
+		label = "chg_therm";
+		reg = <0x74>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <3>;
+		qcom,btm-channel-number = <0x90>;
+		qcom,thermal-node;
+	};
+	chan@78{
+		label = "wchg_therm";
+		reg = <0x78>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <15>;
+		qcom,fast-avg-setup = <3>;
+		qcom,btm-channel-number = <0x98>;
+		qcom,thermal-node;
+	};
+};
+
+&max17050 {
+	maxim,configuration {
+		coff		= /bits/ 16 <0xFFE3>; /* -9.28 * 3.125 */
+	};
+};

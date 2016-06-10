@@ -1,0 +1,2 @@
+obj-$(CONFIG_MSMB_CAMERA_SHAMU_T) += cpp/
+obj-$(CONFIG_MSMB_CAMERA_SHAMU_T) += vpe/

@@ -1,0 +1,260 @@
+/* Copyright (c) 2014 Motorola Mobility LLC
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "apq8084-moto-common.dtsi"
+#include "apq8084-mot-camera-sensor.dtsi"
+#include "dsi-panel-mot-dummy-qhd-video.dtsi"
+#include "dsi-panel-mot-smd-QHD-cmd.dtsi"
+
+/ {
+	model = "Motorola APQ 8084 Quark";
+	compatible = "qcom,apq8084-quark",
+		   "qcom,apq8084-moto",
+		   "qcom,apq8084";
+
+	memory {
+		mmns_mem: mmns_region@0 {
+			linux,reserve-contiguous-region;
+			linux,reserve-region;
+			linux,remove-completely;
+			reg = <0 0 0 0xc800000>;
+			label = "mmns_mem";
+		};
+	};
+};
+
+&pcie0 {
+	vreg-0.9-supply = <&pma8084_l3>;
+};
+
+&pma8084_l22 {
+	regulator-always-on;
+};
+
+&pma8084_l17 {
+	regulator-min-microvolt = <3100000>;
+	regulator-max-microvolt = <3100000>;
+	qcom,init-voltage = <3100000>;
+	/delete-property/ regulator-always-on;
+};
+
+&pma8084_lvs3 {
+	/delete-property/ regulator-always-on;
+};
+
+&mdss_fb0 {
+	qcom,mdss-fb-split = <720 720>;
+	qcom,mdss-fb-rot-180;
+};
+
+&mdss_mdp {
+	qcom,mdss-pref-prim-intf = "dsi";
+	vdd-cx-supply = <&pma8084_s2_corner>;
+};
+
+&vbat_disp_vreg {
+	regulator-boot-on;
+};
+
+&mdss_dsi0 {
+	mmi,mipi-d0-sel = <&msmgpio 14 0>;
+	qcom,dsi-pref-prim-pan = <&mot_smd_QHD_0_cmd_v0>;
+	qcom,platform-reset-gpio = <&msmgpio 86 0>;
+	qcom,platform-te-gpio = <&msmgpio 12 0>;
+	vbat_disp-supply = <&vbat_disp_vreg>;
+	vdd_disp-supply = <&pma8084_lvs3>;
+	vci_disp-supply = <&pma8084_l17>;
+	/delete-property/ vdd-supply;
+	qcom,panel-supply-entries {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		qcom,panel-supply-entry@0 {
+			reg = <0>;
+			qcom,supply-name = "vbat_disp";
+			qcom,supply-min-voltage = <5000000>;
+			qcom,supply-max-voltage = <5000000>;
+			qcom,supply-enable-load = <300000>;
+			qcom,supply-disable-load = <100>;
+			qcom,supply-pre-on-sleep = <0>;
+			qcom,supply-post-on-sleep = <0>;
+			qcom,supply-pre-off-sleep = <0>;
+			qcom,supply-post-off-sleep = <0>;
+		};
+		qcom,panel-supply-entry@1 {
+			reg = <1>;
+			qcom,supply-name = "vdd_disp";
+			qcom,supply-min-voltage = <1800000>;
+			qcom,supply-max-voltage = <1800000>;
+			qcom,supply-enable-load = <300000>;
+			qcom,supply-disable-load = <100>;
+			qcom,supply-pre-on-sleep = <0>;
+			qcom,supply-post-on-sleep = <0>;
+			qcom,supply-pre-off-sleep = <0>;
+			qcom,supply-post-off-sleep = <0>;
+		};
+		qcom,panel-supply-entry@2 {
+			reg = <2>;
+			qcom,supply-name = "vci_disp";
+			qcom,supply-min-voltage = <3100000>;
+			qcom,supply-max-voltage = <3100000>;
+			qcom,supply-enable-load = <330000>;
+			qcom,supply-disable-load = <100>;
+			qcom,supply-pre-on-sleep = <0>;
+			qcom,supply-post-on-sleep = <20>;
+			qcom,supply-pre-off-sleep = <0>;
+			qcom,supply-post-off-sleep = <0>;
+		};
+	};
+};
+
+&mdss_dsi1 {
+	qcom,dsi-pref-prim-pan = <&mot_smd_QHD_1_cmd_v0>;
+	/delete-property/ vdd-supply;
+	vbat_disp-supply = <&vbat_disp_vreg>;
+	vdd_disp-supply = <&pma8084_lvs3>;
+	vci_disp-supply = <&pma8084_l17>;
+
+	qcom,panel-supply-entries {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		qcom,panel-supply-entry@0 {
+			reg = <0>;
+			qcom,supply-name = "vbat_disp";
+			qcom,supply-min-voltage = <5000000>;
+			qcom,supply-max-voltage = <5000000>;
+			qcom,supply-enable-load = <300000>;
+			qcom,supply-disable-load = <100>;
+			qcom,supply-pre-on-sleep = <0>;
+			qcom,supply-post-on-sleep = <0>;
+			qcom,supply-pre-off-sleep = <0>;
+			qcom,supply-post-off-sleep = <0>;
+		};
+		qcom,panel-supply-entry@1 {
+			reg = <1>;
+			qcom,supply-name = "vdd_disp";
+			qcom,supply-min-voltage = <1800000>;
+			qcom,supply-max-voltage = <1800000>;
+			qcom,supply-enable-load = <300000>;
+			qcom,supply-disable-load = <100>;
+			qcom,supply-pre-on-sleep = <0>;
+			qcom,supply-post-on-sleep = <0>;
+			qcom,supply-pre-off-sleep = <0>;
+			qcom,supply-post-off-sleep = <0>;
+		};
+		qcom,panel-supply-entry@2 {
+			reg = <2>;
+			qcom,supply-name = "vci_disp";
+			qcom,supply-min-voltage = <3100000>;
+			qcom,supply-max-voltage = <3100000>;
+			qcom,supply-enable-load = <330000>;
+			qcom,supply-disable-load = <100>;
+			qcom,supply-pre-on-sleep = <0>;
+			qcom,supply-post-on-sleep = <0>;
+			qcom,supply-pre-off-sleep = <0>;
+			qcom,supply-post-off-sleep = <0>;
+		};
+	};
+};
+
+&mot_smd_QHD_0_cmd_v0 {
+	qcom,cont-splash-enabled;
+	mmi,partial-mode-enabled;
+	mmi,quickdraw-enabled;
+	qcom,partial-update-enabled;
+	qcom,dcs-cmd-by-left;
+	qcom,partial-update-roi-merge;
+};
+
+&mot_smd_QHD_1_cmd_v0 {
+	qcom,cont-splash-enabled;
+	mmi,partial-mode-enabled;
+	qcom,partial-update-enabled;
+	qcom,dcs-cmd-by-left;
+	qcom,partial-update-roi-merge;
+};
+
+&mot_smd_QHD_0_cmd_v1 {
+	qcom,cont-splash-enabled;
+	mmi,partial-mode-enabled;
+	mmi,quickdraw-enabled;
+	qcom,partial-update-enabled;
+	qcom,dcs-cmd-by-left;
+	qcom,partial-update-roi-merge;
+};
+
+&mot_smd_QHD_1_cmd_v1 {
+	qcom,cont-splash-enabled;
+	mmi,partial-mode-enabled;
+	qcom,partial-update-enabled;
+	qcom,dcs-cmd-by-left;
+	qcom,partial-update-roi-merge;
+};
+
+
+&soc {
+	sound {
+		qcom,ext_hs_detect = "tpa6165";
+	};
+
+	qcom,ion {
+		qcom,ion-heap@30 { /* MMNS HEAP */
+			compatible = "qcom,msm-ion-reserve";
+			reg = <30>;
+			qcom,heap-align = <0x1000>;
+			linux,contiguous-region = <&mmns_mem>;
+			qcom,ion-heap-type = "CARVEOUT";
+		};
+	};
+};
+
+&i2c_1 {
+	synaptics_dsx_i2c@20 {
+		status = "disabled";
+	};
+
+	atmel_mxt_ts@4a {
+		atmel,key-buttons = <59 61 60 0 0 0 0 0>; /* KEY_F1,F2,F3 */
+		touchstate_modes {
+			touchmode-alternate = <&alternate_active &alternate_suspended>;
+		};
+		default_active: touchstate_default_active {
+			patch-data = "T8@11=2;T111@9=1e;T15@0=b;";
+		};
+		default_suspended: touchstate_aod_suspended {
+			patch-data = "T8@11=2;T111@9=1e;T15@0=a;T100@3=0,6=1,47=32,49=a;T7@0=0,1=0,2=0;";
+		};
+		alternate_active: touchstate_folio_active {
+			patch-data = "T8@11=2;T111@9=1e;T15@0=a;T78@0=1,1=3,6=18;T100@6=1,32=10,49=a,53=5;";
+		};
+		alternate_suspended: touchstate_folio_suspended {
+			patch-data = "T8@11=2;T111@9=1e;T15@0=a;T78@0=1,1=3,6=18;T100@6=1,32=10,49=a,53=5;T7@0=0,1=0,2=0;";
+		};
+	};
+};
+
+&max17050 {
+	maxim,configuration {
+		coff		= /bits/ 16 <0xFFF9>; /* -2.18 * 3.125 */
+	};
+};
+
+&rpm_bus {
+	rpm-regulator-ldoa15 {
+		status = "okay";
+		regulator-l15 {
+			regulator-min-microvolt = <1275000>;
+			regulator-max-microvolt = <1275000>;
+			qcom,init-voltage = <1275000>;
+			status = "okay";
+		};
+	};
+};
