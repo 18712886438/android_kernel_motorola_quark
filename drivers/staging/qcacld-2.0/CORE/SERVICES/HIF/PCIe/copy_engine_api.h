@@ -169,7 +169,7 @@ unsigned int CE_sendlist_sizeof(void);
 void CE_sendlist_init(struct CE_sendlist *sendlist);
 
 /* Append a simple buffer (address/length) to a sendlist. */
-void CE_sendlist_buf_add(struct CE_sendlist *sendlist,
+int CE_sendlist_buf_add(struct CE_sendlist *sendlist,
                          CE_addr_t buffer,
                          unsigned int nbytes,
                          u_int32_t flags /* OR-ed with internal flags */);
@@ -423,6 +423,20 @@ struct CE_sendlist {
 #define ATH_ISR_NOSCHED         0x0000  /* Do not schedule bottom half/DPC                */
 #define ATH_ISR_SCHED           0x0001  /* Schedule the bottom half for execution        */
 #define ATH_ISR_NOTMINE         0x0002  /* This was not my interrupt - for shared IRQ's    */
+
+#ifdef IPA_UC_OFFLOAD
+/*
+ * Copy engine should release resource to micro controller
+ * Micro controller needs
+   - Copy engine source descriptor base address
+   - Copy engine source descriptor size
+   - PCI BAR address to access copy engine regiser
+ */
+void CE_ipaGetResource(struct CE_handle *ce,
+            a_uint32_t *ce_sr_base_paddr,
+            a_uint32_t *ce_sr_ring_size,
+            a_uint32_t *ce_reg_paddr);
+#endif /* IPA_UC_OFFLOAD */
 
 #endif /* CONFIG_COPY_ENGINE_SUPPORT */
 #endif /* __COPY_ENGINE_API_H__ */
