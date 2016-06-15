@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf modules
 export CONFIG_FILE="apq8084-perf_defconfig"
 export ARCH="arm"
 export CROSS_COMPILE="arm-eabi-"
@@ -7,3 +8,5 @@ export CONFIG_ABS_PATH="arch/${ARCH}/configs/${CONFIG_FILE}"
 export PATH=$PATH:${TOOL_CHAIN_PATH}
 make -j4 $CONFIG_FILE
 make -j4
+mkdir modules
+find . -name '*.ko' -exec cp -av {} modules/ \;
