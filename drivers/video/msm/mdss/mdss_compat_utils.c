@@ -207,7 +207,7 @@ static int mdss_fb_compat_set_lut(struct fb_info *info, unsigned long arg)
 int mdss_fb_compat_ioctl(struct fb_info *info, unsigned int cmd,
 			 unsigned long arg)
 {
-	int ret;
+	int ret = 0;
 
 	if (!info || !info->par)
 		return -EINVAL;
