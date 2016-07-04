@@ -4,8 +4,7 @@ START=$(date +%s.%N);
 START2="$(date)";
 echo -e "\n build start $(date)\n";
 # Clean 
-make clean
-rm -rf modules && rm arch/arm/boot/dt.img && rm mkboot/boot.img
+rm -rf modules && rm arch/arm/boot/dt.img && rm mkboot/boot.img && rm arch/arm/boot/dt.img.lz4
 # Export
 export CONFIG_FILE="apq8084-perf_defconfig"
 export ARCH="arm"
@@ -25,11 +24,13 @@ mkdir modules/qca_cld
 mv modules/wlan.ko modules/qca_cld/qca_cld_wlan.ko
 # Build DTB
 tools/dtbToolCM -s 4096 -o arch/arm/boot/dt.img -p scripts/dtc/ arch/arm/boot/dts/
+lz4 -9 arch/arm/boot/dt.img
 # Cp Kernel Image and DT Image
 cp -rf arch/arm/boot/zImage mkboot/stock/zImage
-cp -rf arch/arm/boot/dt.img mkboot/stock/dt.img
+cp -rf arch/arm/boot/dt.img.lz4 mkboot/stock/dt.img
 # Build boot.img
-mkboot/mkboot stock boot.img 
+cd mkboot
+./mkboot stock boot.img 
 # Final Time Count
 END2="$(date)";
 END=$(date +%s.%N);
