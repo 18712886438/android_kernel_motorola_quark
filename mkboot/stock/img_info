@@ -1,0 +1,12 @@
+kernel=zImage
+ramdisk=ramdisk
+dt=dt.img
+page_size=4096
+kernel_size=8505256
+ramdisk_size=1659797
+dtb_size=615955
+base_addr=0x00000000
+kernel_offset=0x00008000
+ramdisk_offset=0x01000000
+tags_offset=0x00000100
+cmd_line="console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x37 ehci-hcd.park=3 vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags utags.backup=/dev/block/platform/msm_sdcc.1/by-name/utagsBackup"
