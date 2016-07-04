@@ -1,8 +1,10 @@
 #!/bin/bash
+#By CallMESuper
+#Credit to bhb27
 # Timer Count
-START=$(date +%s.%N);
-START2="$(date)";
-echo -e "\n build start $(date)\n";
+START=$(date +%s.%N)
+START2="$(date)"
+echo -e "\n build start $(date)\n"
 # Clean 
 rm -rf modules && rm arch/arm/boot/dt.img && rm mkboot/boot.img && rm arch/arm/boot/dt.img.lz4
 # Export
@@ -32,6 +34,6 @@ cp -rf arch/arm/boot/dt.img.lz4 mkboot/stock/dt.img
 cd mkboot
 ./mkboot stock boot.img 
 # Final Time Count
-END2="$(date)";
-END=$(date +%s.%N);
-echo -e "Build end   $END2 \n";
+END2="$(date)"
+END=$(date +%s.%N)
+echo -e "Build end   $END2 \n"
